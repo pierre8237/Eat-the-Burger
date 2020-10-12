@@ -1,7 +1,7 @@
-var express = require("express");
+const express = require("express");
 
-var router = express.Router();
-var burger = require("../models/burger.js");
+const router = express.Router();
+const burger = require("../models/burger.js");
 
 // get route -> index
 router.get("/", function (req, res) {
