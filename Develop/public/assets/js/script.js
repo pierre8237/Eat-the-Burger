@@ -6,11 +6,11 @@ $(document).ready(function () {
       devoured: 0
     };
 
-    $.ajax("/burgers/create", {
+    $.ajax("/api/burgers", {
       method: "POST",
       data: newBurger
     }).then(function () {
-      location.replace();
+      location.reload();
     });
   });
 
@@ -24,7 +24,7 @@ $(document).ready(function () {
       method: "PUT",
       data: burgerEaten
     }).then(function () {
-      location.replace();
+      location.reload()();
     });
   });
 
@@ -34,11 +34,11 @@ $(document).ready(function () {
     const burgerEaten = {
       devoured: 1
     };
-    $.ajax("/burgers/" + id, {
+    $.ajax("/api/burgers/" + id, {
       method: "DELETE",
       data: burgerEaten
     }).then(function () {
-      location.replace();
+      location.reload()();
     });
   });
 });

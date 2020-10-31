@@ -1,7 +1,7 @@
 // Here is the O.R.M. where you write functions that takes inputs and conditions
 // and turns them into database commands like SQL.
 
-const connection = require("./connection");
+const connection = require("../config/connection");
 
 // wrapper for orm.js that using MySQL query callback will return burger_data, render to index with handlebar
 // {
@@ -20,11 +20,13 @@ function translateSql(obj) {
   for (key in obj) {
     let value = ob[key];
     if (Object.hasOwnProperty.call(ob, key)) {
-      value = "'" + value + "'";
+      if (typeof value === "string" && value.indexOf("") >= 0) {
+        value = "'" + value + "'";
+      }
+      arr.push(key + "=" + value);
     }
-    arr.push(key + "=" + value);
+    return arr.toString;
   }
-  return arr.toString;
 }
 
 const orm = {

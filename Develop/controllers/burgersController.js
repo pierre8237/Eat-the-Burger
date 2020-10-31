@@ -10,16 +10,16 @@ router.get("/", function (req, res) {
 router.get("/burgers", function (req, res) {
   burger.selectAll(function (burgerData) {
     // wrapper for orm.js that using MySQL query callback will return burger_data, render to index with handlebar
-    const hbsObj = {
+    const exphbsObj = {
       burger_data: burgerData
     };
-    console.log(hbsObj);
-    res.render("index", hbsObj);
+    console.log(exphbsObj);
+    res.render("index", exphbsObj);
   });
 });
 
 // post route -> back to index
-router.post("/burgers/create", function (req, res) {
+router.post("/api/burgers", function (req, res) {
   burger.insertOne(
     ["burger_name", "devoured"],
     [req.body.burger_name, req.body.devoured],
@@ -28,7 +28,6 @@ router.post("/burgers/create", function (req, res) {
     }
   );
 });
-
 // put route -> back to index
 router.put("/burgers/:id", function (req, res) {
   let condition = "id " + req.params.id;
@@ -43,7 +42,7 @@ router.put("/burgers/:id", function (req, res) {
   });
 });
 
-router.delete("/burgers/:id", function (req, res) {
+router.delete("api/burgers/:id", function (req, res) {
   let condition = "id = " + req.params.id;
   burger.deleteOne(condition, function (result) {
     if (result.changedRows === 0) {
