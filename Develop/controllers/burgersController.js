@@ -1,7 +1,6 @@
 const express = require("express");
-
-const router = express.Router();
 const burger = require("../models/burger.js");
+const router = express.Router();
 
 // get route -> index
 router.get("/", function (req, res) {
@@ -9,21 +8,50 @@ router.get("/", function (req, res) {
 });
 
 router.get("/burgers", function (req, res) {
-  // express callback response by calling burger.selectAllBurger
-  burger.all(function (burgerData) {
+  burger.selectAll(function (burgerData) {
     // wrapper for orm.js that using MySQL query callback will return burger_data, render to index with handlebar
-    res.render("index", { burger_data: burgerData });
+    const hbsObj = {
+      burger_data: burgerData
+    };
+    console.log(hbsObj);
+    res.render("index", hbsObj);
   });
 });
 
 // post route -> back to index
 router.post("/burgers/create", function (req, res) {
-  // takes the request object using it as input for burger.addBurger
+  burger.insertOne(
+    ["burger_name", "devoured"],
+    [req.body.burger_name, req.body.devoured],
+    function (result) {
+      res.json({ id: result.insertId });
+    }
+  );
 });
 
 // put route -> back to index
 router.put("/burgers/:id", function (req, res) {
-  burger.update(req.params.id, function (result) {});
+  let condition = "id " + req.params.id;
+  burger.updateOne({ devoured: req.body.devoured }, condition, function (
+    result
+  ) {
+    if (result.changedRows === 0) {
+      return res.status(404).end();
+    } else {
+      res.status(200).end();
+    }
+  });
+});
+
+router.delete("/burgers/:id", function (req, res) {
+  let condition = "id = " + req.params.id;
+  burger.deleteOne(condition, function (result) {
+    if (result.changedRows === 0) {
+      return res.status(404).end();
+    } else {
+      res.status(200).end();
+    }
+  });
 });
 
 module.exports = router;
